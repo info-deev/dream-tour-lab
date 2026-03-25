@@ -13,6 +13,12 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   modules: ["@nuxtjs/tailwindcss", "@nuxt/icon"],
   icon: {
+    mode: "css",
+    cssLayer: "base",
+    clientBundle: {
+      scan: true,
+      includeCustomCollections: true,
+    },
     customCollections: [
       {
         prefix: "my-icon", // Префикс для использования: <Icon name="my-icon:home" />
