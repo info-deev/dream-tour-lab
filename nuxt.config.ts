@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
-    baseURL: "/dream-tour-lab/",
     head: {
       title: "Дрим тур", // default fallback title
       htmlAttrs: {
