@@ -41,8 +41,8 @@ const posts = [
 </script>
 
 <template>
-  <div class="bg-white min-h-screen pt-32 pb-24">
-    <div class="max-w-7xl mx-auto px-6">
+  <div class="bg-white min-h-screen pt-32 pb-24 px-6">
+    <div class="max-w-7xl mx-auto">
       <!-- Заголовок страницы -->
       <div class="text-center mb-20">
         <div class="flex items-center justify-center gap-3 mb-3">
@@ -101,7 +101,7 @@ const posts = [
         >
           <!-- Картинка с оверлеем -->
           <div
-            class="relative h-64 rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-300"
+            class="relative h-64 rounded-3xl overflow-hidden mb-6 shadow-sm group-hover:shadow-xl transition-all duration-300"
           >
             <img
               :src="post.image"

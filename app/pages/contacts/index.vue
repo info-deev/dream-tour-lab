@@ -18,9 +18,9 @@ const socialLinks = [
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-6">
+  <div class="max-w-7xl px-6 md:px-0 mx-auto">
     <!-- Header Section -->
-    <section class="pt-32 pb-16 px-6 bg-gray-50">
+    <section class="pt-32 pb-16 bg-gray-50">
       <div class="max-w-7xl mx-auto text-center">
         <div class="flex items-center justify-center gap-3 mb-3">
           <div class="w-8 h-[1px] bg-cyan-600/30"></div>
@@ -44,14 +44,14 @@ const socialLinks = [
     </section>
 
     <!-- Info & Form Grid -->
-    <section class="py-24 px-6">
+    <section class="pb-16">
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <!-- Contact Cards -->
           <div class="lg:col-span-1 space-y-6">
             <!-- Card: Phone -->
             <div
-              class="group p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
+              class="group p-6 md:p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
             >
               <div
                 class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:text-white transition-colors"
@@ -70,7 +70,7 @@ const socialLinks = [
 
             <!-- Card: Email -->
             <div
-              class="group p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
+              class="group p-6 md:p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
             >
               <div
                 class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors"
@@ -90,7 +90,7 @@ const socialLinks = [
             </div>
 
             <!-- Socials -->
-            <div class="p-8 bg-gray-900 rounded-3xl text-white">
+            <div class="p-6 md:p-8 bg-gray-900 rounded-3xl text-white">
               <h4 class="text-lg font-bold mb-6">Мы в соцсетях</h4>
               <div class="flex gap-4">
                 <a
@@ -126,7 +126,7 @@ const socialLinks = [
 
           <!-- Contact Form -->
           <div
-            class="lg:col-span-2 bg-white border border-gray-100 shadow-2xl shadow-gray-200/50 rounded-[2rem] p-8 md:p-12"
+            class="lg:col-span-2 bg-white border border-gray-100 shadow-2xl shadow-gray-200/50 rounded-3xl p-6 md:p-12"
           >
             <form @submit.prevent class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -180,10 +180,10 @@ const socialLinks = [
     </section>
 
     <!-- Map Section -->
-    <section class="pb-24 px-6">
+    <section class="pb-24">
       <div class="max-w-7xl mx-auto">
         <div
-          class="relative h-[450px] w-full bg-gray-200 rounded-[2.5rem] overflow-hidden shadow-inner"
+          class="relative h-[450px] w-full bg-gray-200 rounded-3xl overflow-hidden shadow-inner"
         >
           <!-- Заглушка для карты (сюда можно вставить iframe или компонент карты) -->
           <div

@@ -40,8 +40,8 @@ const tours = [
 </script>
 
 <template>
-  <div class="bg-white min-h-screen pt-32 pb-24">
-    <div class="max-w-7xl mx-auto px-6">
+  <div class="bg-white min-h-screen pt-32 pb-24 px-6">
+    <div class="max-w-7xl mx-auto">
       <!-- Заголовок и фильтры -->
       <div class="mb-16">
         <div class="flex items-center gap-3 mb-4">
@@ -57,7 +57,7 @@ const tours = [
 
         <!-- Панель фильтров в стиле твоих карточек -->
         <div
-          class="bg-gray-50 p-6 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-6"
+          class="bg-gray-50 p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-6"
         >
           <div class="space-y-2">
             <label

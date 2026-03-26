@@ -239,7 +239,7 @@ onUnmounted(stopAutoplay);
     opacity 0.6s;
   will-change: transform, opacity;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 1.5rem;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   will-change: transform, opacity;
@@ -289,6 +289,19 @@ onUnmounted(stopAutoplay);
   padding: 0 20px;
   pointer-events: none; /* Чтобы кнопки не перекрывали клики по слайдам вне самих кнопок */
   z-index: 200;
+
+  /* Логика появления при ховере */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+/* Показываем кнопки при ховере на весь контейнер */
+.carousel-3d-container:hover .controls {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Базовое состояние кнопки */

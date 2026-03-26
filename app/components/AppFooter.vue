@@ -37,8 +37,8 @@ const socialLinks = [
 </script>
 
 <template>
-  <footer class="bg-gray-900 text-gray-300 pt-16 pb-8">
-    <div class="max-w-7xl mx-auto px-6">
+  <footer class="bg-gray-900 text-gray-300 pt-16 pb-8 px-6">
+    <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
         <!-- Колонка 1: О бренде -->
         <div class="flex flex-col gap-6">

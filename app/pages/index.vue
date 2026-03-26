@@ -176,11 +176,6 @@ useHead({
           class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
         >
           <div class="max-w-xl">
-            <!-- <span
-              class="text-cyan-600 font-bold uppercase tracking-[0.2em] text-xs mb-3 block"
-            >
-              Лучшие предложения недели
-            </span> -->
             <div class="flex items-center gap-3 mb-3">
               <div class="w-8 h-[1px] bg-cyan-600/30"></div>
               <span
@@ -188,7 +183,6 @@ useHead({
               >
                 Лучшие предложения недели
               </span>
-              <div class="w-8 h-[1px] bg-cyan-600/30"></div>
             </div>
 
             <h2
@@ -353,7 +347,7 @@ useHead({
                 draggable="false"
               />
             </div>
-            <div class="bg-black/50 backdrop-blur-sm text-white p-4">
+            <div class="bg-black/50 backdrop-blur-sm text-white p-6">
               <h3 class="font-black mb-3 uppercase">{{ item.title }}</h3>
               <p>{{ item.description }}</p>
             </div>
@@ -363,7 +357,7 @@ useHead({
     </section>
 
     <!-- 5. Секция "5 шагов" -->
-    <section class="py-24 bg-white px-6 relative overflow-hidden">
+    <section class="py-24 bg-white px-6">
       <div class="max-w-7xl mx-auto">
         <!-- Заголовок -->
         <div class="text-center mb-20">
@@ -497,16 +491,8 @@ useHead({
     </section>
 
     <!-- 6. Секция бронирования (CTA) -->
-    <section class="py-24 bg-white px-6 relative overflow-hidden">
-      <!-- Декор фона -->
-      <div
-        class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-50 rounded-full blur-3xl opacity-50"
-      ></div>
-      <div
-        class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-50 rounded-full blur-3xl opacity-50"
-      ></div>
-
-      <div class="relative z-10 max-w-7xl mx-auto text-center mb-16">
+    <section class="py-24 bg-white px-6">
+      <div class="max-w-7xl mx-auto text-center mb-16">
         <div class="flex items-center justify-center gap-3 mb-3">
           <div class="w-8 h-[1px] bg-cyan-600/30"></div>
           <span

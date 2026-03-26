@@ -105,7 +105,7 @@ const included = [
         <!-- Правая колонка (Бронирование) -->
         <div class="lg:col-span-1">
           <div
-            class="sticky top-32 p-8 bg-white border border-gray-100 rounded-[2.5rem] shadow-2xl shadow-gray-200/50"
+            class="sticky top-32 p-8 bg-white border border-gray-100 rounded-3xl shadow-2xl shadow-gray-200/50"
           >
             <div class="mb-6">
               <span class="text-gray-400 text-sm">Цена за человека</span>

@@ -163,7 +163,7 @@ const team = [
         <div
           v-for="(value, index) in values"
           :key="index"
-          class="group p-10 bg-gray-50 rounded-[2.5rem] hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100"
+          class="group p-6 md:p-10 bg-gray-50 rounded-3xl hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100"
         >
           <div
             :class="`w-16 h-16 ${value.bgColor} ${value.iconColor} rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform`"

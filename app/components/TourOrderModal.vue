@@ -186,7 +186,7 @@ const enableScroll = () => {
 
       <!-- Контент модалки -->
       <div
-        class="relative bg-white w-full max-w-2xl max-h-full md:max-h-[90vh] overflow-y-auto rounded-none md:rounded-[2.5rem] shadow-2xl border border-gray-100"
+        class="relative bg-white w-full max-w-2xl max-h-full md:max-h-[90vh] overflow-y-auto rounded-none md:rounded-3xl shadow-2xl border border-gray-100"
       >
         <!-- Кнопка закрытия -->
         <button
