@@ -75,6 +75,7 @@ const container = ref(null);
 const currentIndex = ref(0);
 const isDragging = ref(false);
 let startX = 0;
+let startY = 0;
 let autoplayTimer = null;
 
 // --- Динамический расчет смещения ---
@@ -138,14 +139,29 @@ const handleSlideClick = (index) => {
 // --- Логика Drag & Swipe ---
 const handleDragStart = (e) => {
   isDragging.value = true;
-  startX = e.type.includes("touch") ? e.touches[0].clientX : e.clientX;
+  const touch = e.type.includes("touch") ? e.touches[0] : e;
+  startX = touch.clientX;
+  startY = touch.clientY; // Запоминаем Y
   stopAutoplay();
 };
 
 const handleDragMove = (e) => {
   if (!isDragging.value) return;
-  // Предотвращаем скролл страницы при свайпе на мобилках
-  if (e.type === "touchmove") e.preventDefault();
+
+  if (e.type === "touchmove") {
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - startX);
+    const deltaY = Math.abs(touch.clientY - startY);
+
+    // Если движение больше горизонтальное, чем вертикальное — блокируем скролл страницы
+    // и работаем со слайдером. Если наоборот — ничего не делаем, даем скроллить страницу.
+    if (deltaX > deltaY) {
+      if (e.cancelable) e.preventDefault();
+    } else {
+      // Если это вертикальный скролл, отменяем dragging, чтобы слайды не прыгали
+      isDragging.value = false;
+    }
+  }
 };
 
 const handleDragEnd = (e) => {
