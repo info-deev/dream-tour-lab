@@ -27,7 +27,7 @@ const submitForm = async () => {
     <div class="flex flex-col md:flex-row">
       <!-- Левая часть: Инфо -->
       <div
-        class="bg-cyan-600 md:w-1/3 p-10 text-white flex flex-col justify-between"
+        class="bg-cyan-600 md:w-1/3 p-6 md:p-10 text-white flex flex-col justify-between"
       >
         <div>
           <h3 class="text-2xl font-bold mb-4">Поможем с выбором!</h3>
@@ -50,7 +50,7 @@ const submitForm = async () => {
       </div>
 
       <!-- Правая часть: Форма -->
-      <div class="md:w-2/3 p-10 relative">
+      <div class="md:w-2/3 p-6 md:p-10 relative">
         <Transition name="fade-slide" mode="out-in">
           <div v-if="!isSubmitted" key="form">
             <form

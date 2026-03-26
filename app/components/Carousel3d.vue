@@ -216,6 +216,8 @@ onUnmounted(stopAutoplay);
   width: v-bind("props.width");
   height: v-bind("props.height");
 
+  max-width: 90%;
+
   transition:
     transform 0.6s cubic-bezier(0.25, 1, 0.35, 1),
     opacity 0.6s;
@@ -319,6 +321,9 @@ onUnmounted(stopAutoplay);
 @media (max-width: 600px) {
   .controls {
     display: none;
+  }
+  .dots {
+    gap: 8px;
   }
 }
 </style>

@@ -176,7 +176,7 @@ const enableScroll = () => {
   <Transition name="fade" @after-leave="enableScroll">
     <div
       v-if="isOpen"
-      class="fixed top-0 left-0 w-full h-full z-[100] flex items-center justify-center p-4"
+      class="fixed top-0 left-0 w-full h-full z-[100] flex items-center justify-center md:p-4"
     >
       <!-- Оверлей -->
       <div
@@ -186,19 +186,19 @@ const enableScroll = () => {
 
       <!-- Контент модалки -->
       <div
-        class="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] shadow-2xl border border-gray-100"
+        class="relative bg-white w-full max-w-2xl max-h-full md:max-h-[90vh] overflow-y-auto rounded-none md:rounded-[2.5rem] shadow-2xl border border-gray-100"
       >
         <!-- Кнопка закрытия -->
         <button
           @click="emit('close')"
-          class="absolute top-6 right-6 text-gray-400 hover:text-cyan-600 transition-colors"
+          class="absolute top-3 md:top-6 right-3 md:right-6 text-gray-400 hover:text-cyan-600 transition-colors"
         >
           <Icon name="i-lucide:x" size="28" />
         </button>
 
-        <div class="p-8 md:p-12">
+        <div class="p-6 md:p-12">
           <div class="mb-8">
-            <h2 class="text-3xl font-black text-gray-900 mb-2">
+            <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">
               Заявка на подбор тура
             </h2>
             <p class="text-gray-500 text-sm">
@@ -343,19 +343,6 @@ const enableScroll = () => {
 
             <!-- Контакты -->
             <div class="md:col-span-2 space-y-4 pt-4 border-t border-gray-100">
-              <!-- <div class="space-y-2">
-                <label
-                  class="text-[10px] font-bold uppercase tracking-widest text-cyan-600"
-                  >Ваше имя</label
-                >
-                <input
-                  v-model="form.name"
-                  type="text"
-                  placeholder="Руслан"
-                  class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
-                />
-              </div> -->
-
               <div class="space-y-2">
                 <label
                   class="text-[10px] font-bold uppercase tracking-widest text-cyan-600"
@@ -401,12 +388,6 @@ const enableScroll = () => {
                     {{ m }}
                   </button>
                 </div>
-                <!-- <input
-                  v-model="form.phone"
-                  type="tel"
-                  placeholder="+7 (000) 000-00-00"
-                  class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
-                /> -->
                 <div class="space-y-3">
                   <label
                     class="text-[10px] font-bold uppercase tracking-widest text-cyan-600"
