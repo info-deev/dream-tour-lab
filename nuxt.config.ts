@@ -12,7 +12,14 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: "2025-07-15",
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "@pinia/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "@pinia/nuxt", "@nuxt/image"],
+  // Оптимизация изображений: NuxtImg/NuxtPicture + ленивая загрузка.
+  // Внешние URL (picsum.photos) без домена в `domains` отдаются напрямую,
+  // поэтому внешний вид не меняется, но атрибуты lazy loading добавляются.
+  image: {
+    quality: 80,
+    format: ["webp"],
+  },
   // Строгая типизация + проверка типов при сборке
   typescript: {
     strict: true,
