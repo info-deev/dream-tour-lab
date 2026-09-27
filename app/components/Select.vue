@@ -30,7 +30,7 @@ const props = defineProps({
   hasError: { type: String, default: "" },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "blur"]);
 
 const isDropdownOpen = ref(false);
 const rootRef = ref(null);
@@ -67,10 +67,11 @@ const handleInput = (e) => {
   isDropdownOpen.value = true;
 };
 
-// Закрытие при клике вне
+// Закрытие при клике вне; сообщаем родителю о blur для валидации поля
 const handleClickOutside = (event) => {
   if (rootRef.value && !rootRef.value.contains(event.target)) {
     isDropdownOpen.value = false;
+    emit("blur");
   }
 };
 

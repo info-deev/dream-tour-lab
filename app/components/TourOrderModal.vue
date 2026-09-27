@@ -1,5 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import {
+  validateName,
+  validatePhone,
+  validateRequired,
+} from "~/utils/validators";
+
+/** Сообщения об ошибках валидации полей формы */
+type FormErrors = Partial<
+  Record<"name" | "phone" | "departure" | "country", string>
+>;
 
 const props = defineProps({
   isOpen: Boolean,
@@ -120,32 +130,56 @@ const countries = ref([
 
 const communication = ["Телефон", "Telegram", "WhatsApp", "MAX"];
 
-const errors = ref({});
+const errors = ref<FormErrors>({});
 const isLoading = ref(false);
 
+/**
+ * Валидирует отдельное поле формы.
+ * Использует общие валидаторы из utils/validators.ts,
+ * чтобы правила совпадали с остальными формами проекта.
+ *
+ * @param field Имя валидируемого поля.
+ */
+const validateField = (field: keyof FormErrors) => {
+  const value = form.value[field];
+  switch (field) {
+    case "name":
+      errors.value.name = validateName(value)
+        ? undefined
+        : "Введите ваше имя";
+      break;
+    case "phone":
+      errors.value.phone = validatePhone(value)
+        ? undefined
+        : "Введите корректный номер";
+      break;
+    case "departure":
+      errors.value.departure = validateRequired(value)
+        ? undefined
+        : "Выберите место вылета";
+      break;
+    case "country":
+      errors.value.country = validateRequired(value)
+        ? undefined
+        : "Выберите страну";
+      break;
+  }
+};
+
+/**
+ * Валидирует все обязательные поля формы.
+ * @returns `true`, если ошибок нет.
+ */
 const validateForm = () => {
-  const newErrors = {};
-
-  if (!form.value.name.trim() || form.value.name.trim().length < 2) {
-    newErrors.name = "Введите ваше имя";
-  }
-
-  // Простая проверка телефона (минимум 10 цифр)
-  const phoneDigits = form.value.phone.replace(/\D/g, "");
-  if (!phoneDigits || phoneDigits.length < 10) {
-    newErrors.phone = "Введите корректный номер";
-  }
-
-  if (!form.value.departure.trim()) {
-    newErrors.departure = "Выберите место вылета";
-  }
-
-  if (!form.value.country.trim()) {
-    newErrors.country = "Выберите страну";
-  }
-
-  errors.value = newErrors;
-  return Object.keys(newErrors).length === 0;
+  const fields: Array<keyof FormErrors> = [
+    "name",
+    "phone",
+    "departure",
+    "country",
+  ];
+  errors.value = {};
+  fields.forEach(validateField);
+  return fields.every((field) => !errors.value[field]);
 };
 
 const submitOrder = async () => {
@@ -220,6 +254,7 @@ const enableScroll = () => {
                 v-model="form.departure"
                 :items="cities"
                 :has-error="errors.departure"
+                @blur="validateField('departure')"
               />
             </div>
             <div class="space-y-2">
@@ -231,6 +266,7 @@ const enableScroll = () => {
                 v-model="form.country"
                 :items="countries"
                 :has-error="errors.country"
+                @blur="validateField('country')"
               />
             </div>
 
@@ -352,6 +388,7 @@ const enableScroll = () => {
                   v-model="form.name"
                   type="text"
                   placeholder="Руслан"
+                  @blur="validateField('name')"
                   :class="[
                     'w-full bg-gray-50 border rounded-2xl p-4 text-sm outline-none transition-all',
                     errors.name
@@ -397,6 +434,7 @@ const enableScroll = () => {
                     v-model="form.phone"
                     type="tel"
                     placeholder="+7 (000) 000-00-00"
+                    @blur="validateField('phone')"
                     :class="[
                       'w-full bg-gray-50 border rounded-2xl p-4 text-sm outline-none transition-all',
                       errors.phone
