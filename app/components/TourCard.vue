@@ -1,11 +1,14 @@
-<script setup>
-defineProps({
-  tour: {
-    type: Object,
-    required: true,
-    // Ожидаемая структура: { id, title, location, price, duration, rating, image, badge }
-  },
-});
+<script setup lang="ts">
+import { computed } from "vue";
+import type { Tour } from "~/types";
+import { formatPrice, formatDuration } from "~/utils/formatters";
+
+const props = defineProps<{
+  tour: Tour;
+}>();
+
+/** Обложка тура — первое изображение (с фолбэком на пустую строку). */
+const coverImage = computed(() => props.tour.images[0] ?? "");
 </script>
 
 <template>
@@ -15,7 +18,7 @@ defineProps({
     <!-- Изображение -->
     <div class="relative h-64 overflow-hidden">
       <img
-        :src="tour.image"
+        :src="coverImage"
         :alt="tour.title"
         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
@@ -25,7 +28,7 @@ defineProps({
         v-if="tour.badge"
         class="absolute top-4 left-4 bg-cyan-600 text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-full tracking-wider"
       >
-        {{ tour.badge }}
+        {{ tour.badge.label }}
       </div>
 
       <!-- Кнопка "В избранное" -->
@@ -67,7 +70,7 @@ defineProps({
       <div class="flex items-center gap-4 mb-6 border-y border-gray-50 py-3">
         <div class="flex items-center gap-1.5 text-xs text-gray-600">
           <Icon name="i-lucide:clock" class="text-cyan-500" />
-          {{ tour.duration }}
+          {{ formatDuration(tour.duration) }}
         </div>
         <div class="flex items-center gap-1.5 text-xs text-gray-600">
           <Icon name="i-lucide:users" class="text-cyan-500" />
@@ -83,7 +86,7 @@ defineProps({
             >Стоимость</span
           >
           <span class="text-2xl font-black text-gray-900 leading-none">
-            {{ tour.price.toLocaleString() }} ₽
+            {{ formatPrice(tour.price, tour.currency) }}
           </span>
         </div>
 

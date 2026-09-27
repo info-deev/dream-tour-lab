@@ -49,13 +49,16 @@ export const useApi = () => {
     }
 
     try {
-      return await $fetch<T>(`${baseURL}${endpoint}`, {
+      // $fetch возвращает TypedInternalResponse — приводим к T,
+      // т.к. типизация ответа гарантируется контрактом API (T)
+      const data = await $fetch<T>(`${baseURL}${endpoint}`, {
         method: options.method ?? 'GET',
         // Тело сериализуется ofetch; каст необходим, так как body приходит как unknown
         body: options.body as Record<string, unknown> | undefined,
         headers,
         params: options.params,
       });
+      return data as T;
     } catch (error) {
       const apiError = normalizeError(error);
       console.error(`API Error [${endpoint}]:`, apiError.message);

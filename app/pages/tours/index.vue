@@ -1,42 +1,21 @@
-<script setup>
+<script setup lang="ts">
+import { computed } from "vue";
+import { useTours } from "~/composables/useTours";
+
+const { fetchTours } = useTours();
+
+// Список туров: подгружается с API (mock-эндпоинт /api/tours)
+const { data, pending, error } = await useAsyncData(
+  "tours",
+  () => fetchTours(),
+);
+
+/** Плоский массив туров для сетки (пустой при отсутствии данных). */
+const tours = computed(() => data.value?.data ?? []);
+
 useHead({
   title: "Подбор тура",
 });
-const tours = [
-  {
-    id: 1,
-    title: "Мальдивская сказка",
-    location: "Мальдивы, Атолл Ари",
-    price: 145000,
-    duration: "7 ночей",
-    rating: 4.9,
-    image:
-      "https://optim.tildacdn.com/tild6632-3531-4230-a230-363364623331/-/resize/400x700/-/format/webp/image_6.png.webp",
-    badge: "Хит продаж",
-  },
-  {
-    id: 2,
-    title: "Величие Каппадокии",
-    location: "Турция, Гёреме",
-    price: 82000,
-    duration: "5 ночей",
-    rating: 4.8,
-    image:
-      "https://optim.tildacdn.com/tild3361-6361-4130-b130-643966646635/-/resize/800x1400/-/format/webp/photo-1529426301869-.jpg",
-    badge: "Рекомендуем",
-  },
-  {
-    id: 3,
-    title: "Тропики Бали",
-    location: "Индонезия, Убуд",
-    price: 112000,
-    duration: "10 ночей",
-    rating: 5.0,
-    image:
-      "https://optim.tildacdn.com/tild3235-6330-4639-a136-386264383138/-/resize/800x1400/-/format/webp/photo-1605581810011-.jpg",
-    badge: "-15% Скидка",
-  },
-];
 </script>
 
 <template>

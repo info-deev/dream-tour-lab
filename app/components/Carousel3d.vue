@@ -53,17 +53,35 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, watch, computed } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, watch, computed, type CSSProperties } from "vue";
+
+/**
+ * Контракт элемента (слайда) карусели.
+ * Компонент использует `src`/`alt` в default-слоте,
+ * остальные поля читаются кастомными слотами потребителей.
+ */
+interface CarouselItem {
+  /** URL изображения для default-слота */
+  src?: string;
+  /** Альтернативный текст изображения */
+  alt?: string;
+  /** Заголовок слайда (кастомные слоты) */
+  title?: string;
+  /** Описание слайда (кастомные слоты) */
+  description?: string;
+  /** URL изображения (вариант для кастомных слотов) */
+  image?: string;
+}
 
 const props = defineProps({
-  items: { type: Array, required: true },
+  items: { type: Array as () => CarouselItem[], required: true },
   width: { type: String, default: "300px" },
   height: { type: String, default: "400px" },
   visible: {
     type: Number,
     default: 5,
-    validator: (v) => v % 2 !== 0, // Должно быть нечетным для симметрии
+    validator: (v: number) => v % 2 !== 0, // Должно быть нечетным для симметрии
   },
   autoplay: { type: Boolean, default: true },
   interval: { type: Number, default: 3000 },
@@ -71,12 +89,12 @@ const props = defineProps({
   showControls: { type: Boolean, default: true },
 });
 
-const container = ref(null);
+const container = ref<HTMLElement | null>(null);
 const currentIndex = ref(0);
 const isDragging = ref(false);
 let startX = 0;
 let startY = 0;
-let autoplayTimer = null;
+let autoplayTimer: ReturnType<typeof setInterval> | null = null;
 
 // --- Динамический расчет смещения ---
 const stepOffset = computed(() => {
@@ -85,7 +103,7 @@ const stepOffset = computed(() => {
 });
 
 // --- Стили для каждого слайда ---
-const getSlideStyle = (index) => {
+const getSlideStyle = (index: number): CSSProperties => {
   const len = props.items.length;
   if (len === 0) return {};
 
@@ -130,26 +148,32 @@ const prev = () => {
     (currentIndex.value - 1 + props.items.length) % props.items.length;
 };
 
-const handleSlideClick = (index) => {
+const handleSlideClick = (index: number) => {
   if (currentIndex.value !== index) {
     currentIndex.value = index;
   }
 };
 
 // --- Логика Drag & Swipe ---
-const handleDragStart = (e) => {
+const handleDragStart = (e: MouseEvent | TouchEvent) => {
   isDragging.value = true;
-  const touch = e.type.includes("touch") ? e.touches[0] : e;
-  startX = touch.clientX;
-  startY = touch.clientY; // Запоминаем Y
+  if (e instanceof TouchEvent) {
+    const touch = e.touches[0];
+    startX = touch ? touch.clientX : 0;
+    startY = touch ? touch.clientY : 0; // Запоминаем Y
+  } else {
+    startX = e.clientX;
+    startY = e.clientY;
+  }
   stopAutoplay();
 };
 
-const handleDragMove = (e) => {
+const handleDragMove = (e: MouseEvent | TouchEvent) => {
   if (!isDragging.value) return;
 
   if (e.type === "touchmove") {
-    const touch = e.touches[0];
+    const touch = (e as TouchEvent).touches[0];
+    if (!touch) return;
     const deltaX = Math.abs(touch.clientX - startX);
     const deltaY = Math.abs(touch.clientY - startY);
 
@@ -164,11 +188,15 @@ const handleDragMove = (e) => {
   }
 };
 
-const handleDragEnd = (e) => {
+const handleDragEnd = (e: MouseEvent | TouchEvent) => {
   if (!isDragging.value) return;
-  const endX = e.type.includes("touch")
-    ? e.changedTouches[0].clientX
-    : e.clientX;
+  let endX: number;
+  if (e instanceof TouchEvent) {
+    const changed = e.changedTouches[0];
+    endX = changed ? changed.clientX : 0;
+  } else {
+    endX = e.clientX;
+  }
   const delta = startX - endX;
 
   // Порог срабатывания свайпа - 50 пикселей
@@ -196,7 +224,7 @@ const stopAutoplay = () => {
 // Реакция на изменение количества элементов
 watch(
   () => props.items.length,
-  (newLen) => {
+  (newLen: number) => {
     if (currentIndex.value >= newLen) currentIndex.value = 0;
   },
 );

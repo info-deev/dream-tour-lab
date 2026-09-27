@@ -1,23 +1,98 @@
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { reactive, ref } from "vue";
+import { useBooking } from "~/composables/useBooking";
+import { validateName, validatePhone } from "~/utils/validators";
+import type { BookingRequest } from "~/types";
 
-const form = ref({
+/**
+ * Опциональный id тура. Если не задан — это заявка на консультацию
+ * (подбор тура), а не бронирование конкретного тура.
+ */
+const props = defineProps<{ tourId?: number | string }>();
+
+/**
+ * Значение tourId для заявки без привязки к конкретному туру.
+ * Явный маркер «консультация», чтобы не выдумывать несуществующий тур.
+ */
+const CONSULTATION_TOUR_ID = "consultation";
+
+/** Человекочитаемые подписи типов отдыха (для комментария к заявке). */
+const TOUR_TYPE_LABELS: Record<string, string> = {
+  beach: "Пляжный отдых",
+  excursion: "Экскурсионный тур",
+  mountains: "Активный отдых (горы)",
+  cruise: "Круизы",
+};
+
+type TourType = keyof typeof TOUR_TYPE_LABELS;
+
+const form = reactive({
   name: "",
   phone: "",
-  email: "",
-  tourType: "beach",
+  tourType: "beach" as TourType,
 });
 
+/** Ошибки клиентской валидации полей (undefined — поле корректно). */
+const errors = reactive<{ name?: string; phone?: string }>({});
 const isSubmitted = ref(false);
 const isLoading = ref(false);
+const serverError = ref<string | null>(null);
 
-const submitForm = async () => {
+const { createBooking } = useBooking();
+
+/**
+ * Клиентская валидация полей формы.
+ * @returns `true`, если все обязательные поля корректны.
+ */
+function validate(): boolean {
+  errors.name = undefined;
+  errors.phone = undefined;
+  let ok = true;
+  if (!validateName(form.name)) {
+    errors.name = "Укажите имя (минимум 2 символа)";
+    ok = false;
+  }
+  if (!validatePhone(form.phone)) {
+    errors.phone = "Укажите корректный номер телефона";
+    ok = false;
+  }
+  return ok;
+}
+
+/** Отправка формы: валидация и создание заявки через useBooking. */
+async function submitForm() {
+  serverError.value = null;
+  if (!validate()) return;
+
+  const payload: BookingRequest = {
+    tourId: props.tourId ?? CONSULTATION_TOUR_ID,
+    contact: {
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+    },
+    comment: `Тип отдыха: ${TOUR_TYPE_LABELS[form.tourType]}`,
+  };
+
   isLoading.value = true;
-  // Имитация задержки API
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  isLoading.value = false;
-  isSubmitted.value = true;
-};
+  try {
+    await createBooking(payload);
+    isSubmitted.value = true;
+  } catch (e) {
+    serverError.value =
+      e instanceof Error ? e.message : "Не удалось отправить заявку";
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+/** Сброс формы после успешной отправки. */
+function resetForm() {
+  isSubmitted.value = false;
+  form.name = "";
+  form.phone = "";
+  form.tourType = "beach";
+  serverError.value = null;
+}
 </script>
 
 <template>
@@ -66,9 +141,17 @@ const submitForm = async () => {
                   v-model="form.name"
                   type="text"
                   placeholder="Иван Иванов"
-                  required
-                  class="bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                  :class="[
+                    'bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 outline-none transition-all',
+                    errors.name ? 'focus:ring-red-400' : 'focus:ring-cyan-500',
+                  ]"
                 />
+                <p
+                  v-if="errors.name"
+                  class="text-[11px] text-red-500 font-bold"
+                >
+                  {{ errors.name }}
+                </p>
               </div>
 
               <div class="flex flex-col gap-2">
@@ -80,9 +163,17 @@ const submitForm = async () => {
                   v-model="form.phone"
                   type="tel"
                   placeholder="+7 (___) ___-__-__"
-                  required
-                  class="bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                  :class="[
+                    'bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 outline-none transition-all',
+                    errors.phone ? 'focus:ring-red-400' : 'focus:ring-cyan-500',
+                  ]"
                 />
+                <p
+                  v-if="errors.phone"
+                  class="text-[11px] text-red-500 font-bold"
+                >
+                  {{ errors.phone }}
+                </p>
               </div>
 
               <div class="flex flex-col gap-2 md:col-span-2">
@@ -102,6 +193,13 @@ const submitForm = async () => {
               </div>
 
               <div class="md:col-span-2 mt-2">
+                <!-- Ошибка сервера при неудачной отправке -->
+                <p
+                  v-if="serverError"
+                  class="mb-3 bg-red-50 border border-red-100 text-red-600 rounded-xl px-4 py-3 text-sm"
+                >
+                  {{ serverError }}
+                </p>
                 <button
                   :disabled="isLoading"
                   class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-200 transition-all flex items-center justify-center gap-3 group"
@@ -144,7 +242,7 @@ const submitForm = async () => {
               Менеджер уже изучает ваши пожелания и перезвонит вам совсем скоро.
             </p>
             <button
-              @click="isSubmitted = false"
+              @click="resetForm"
               class="mt-8 text-cyan-600 font-semibold hover:underline"
             >
               Отправить еще раз

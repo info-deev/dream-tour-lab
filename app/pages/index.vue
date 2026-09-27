@@ -1,42 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import Carousel3d from "~/components/Carousel3d.vue";
+import { useTours } from "~/composables/useTours";
 
-// Имитация данных (в реальном проекте это будет useFetch с бэкенда)
-const popularTours = [
-  {
-    id: 1,
-    title: "Мальдивская сказка",
-    location: "Мальдивы, Атолл Ари",
-    price: 145000,
-    duration: "7 ночей",
-    rating: 4.9,
-    image:
-      "https://optim.tildacdn.com/tild6632-3531-4230-a230-363364623331/-/resize/400x700/-/format/webp/image_6.png.webp",
-    badge: "Хит продаж",
-  },
-  {
-    id: 2,
-    title: "Величие Каппадокии",
-    location: "Турция, Гёреме",
-    price: 82000,
-    duration: "5 ночей",
-    rating: 4.8,
-    image:
-      "https://optim.tildacdn.com/tild3361-6361-4130-b130-643966646635/-/resize/800x1400/-/format/webp/photo-1529426301869-.jpg",
-    badge: "Рекомендуем",
-  },
-  {
-    id: 3,
-    title: "Тропики Бали",
-    location: "Индонезия, Убуд",
-    price: 112000,
-    duration: "10 ночей",
-    rating: 5.0,
-    image:
-      "https://optim.tildacdn.com/tild3235-6330-4639-a136-386264383138/-/resize/800x1400/-/format/webp/photo-1605581810011-.jpg",
-    badge: "-15% Скидка",
-  },
-];
+const { fetchPopularTours } = useTours();
+
+// Популярные туры: подгружаются с API (mock-эндпоинт /api/tours/popular)
+const { data: popularTours, pending, error } = await useAsyncData(
+  "popular-tours",
+  () => fetchPopularTours(3),
+);
 
 const myList = [
   {
@@ -170,43 +142,11 @@ useHead({
     <Hero />
 
     <!-- 2. Секция "Популярные направления" -->
-    <section class="py-24 bg-white px-6">
-      <div class="max-w-7xl mx-auto">
-        <div
-          class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
-        >
-          <div class="max-w-xl">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-[1px] bg-cyan-600/30"></div>
-              <span
-                class="text-cyan-600 font-bold uppercase tracking-[0.2em] text-[10px]"
-              >
-                Лучшие предложения недели
-              </span>
-            </div>
-
-            <h2
-              class="text-3xl md:text-5xl font-black text-gray-900 leading-tight"
-            >
-              Популярные туры, которые <br />
-              <span class="text-cyan-600">ВЫБИРАЮТ КЛИЕНТЫ</span>
-            </h2>
-          </div>
-          <NuxtLink
-            to="/tours"
-            class="flex items-center gap-2 text-cyan-600 font-bold hover:gap-4 transition-all"
-          >
-            Смотреть все туры
-            <Icon name="i-lucide:arrow-right" />
-          </NuxtLink>
-        </div>
-
-        <!-- Сетка карточек -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <TourCard v-for="tour in popularTours" :key="tour.id" :tour="tour" />
-        </div>
-      </div>
-    </section>
+    <PopularToursSection
+      :tours="popularTours ?? []"
+      :loading="pending"
+      :error="error"
+    />
 
     <!-- 3. Секция "Преимущества" (Текстовый блок) -->
     <section class="py-24 bg-gray-50 px-6 overflow-hidden">
