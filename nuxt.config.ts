@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+/// <reference types="node" />
 export default defineNuxtConfig({
   app: {
     baseURL: "/dream-tour-lab/",
@@ -12,6 +13,17 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-07-15",
   modules: ["@nuxtjs/tailwindcss", "@nuxt/icon"],
+  // Строгая типизация + проверка типов при сборке
+  typescript: {
+    strict: true,
+    typeCheck: true,
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:3000/api",
+      appName: "Dream Tour",
+    },
+  },
   icon: {
     mode: "css",
     cssLayer: "base",
