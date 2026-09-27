@@ -142,8 +142,10 @@ function resetForm() {
                   type="text"
                   placeholder="Иван Иванов"
                   :class="[
-                    'bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 outline-none transition-all',
-                    errors.name ? 'focus:ring-red-400' : 'focus:ring-cyan-500',
+                    'bg-gray-50 border rounded-xl p-4 text-sm focus:ring-2 outline-none transition-all',
+                    errors.name
+                      ? 'border-red-400 focus:ring-red-100'
+                      : 'border-transparent focus:ring-cyan-500',
                   ]"
                 />
                 <p
@@ -164,8 +166,10 @@ function resetForm() {
                   type="tel"
                   placeholder="+7 (___) ___-__-__"
                   :class="[
-                    'bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 outline-none transition-all',
-                    errors.phone ? 'focus:ring-red-400' : 'focus:ring-cyan-500',
+                    'bg-gray-50 border rounded-xl p-4 text-sm focus:ring-2 outline-none transition-all',
+                    errors.phone
+                      ? 'border-red-400 focus:ring-red-100'
+                      : 'border-transparent focus:ring-cyan-500',
                   ]"
                 />
                 <p
