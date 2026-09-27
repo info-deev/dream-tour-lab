@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import type { Tour } from "~/types";
 import { formatPrice, formatDuration } from "~/utils/formatters";
+import { useFavoritesStore } from "~/stores/favorites";
 
 const props = defineProps<{
   tour: Tour;
@@ -9,6 +10,18 @@ const props = defineProps<{
 
 /** Обложка тура — первое изображение (с фолбэком на пустую строку). */
 const coverImage = computed(() => props.tour.images[0] ?? "");
+
+/** Store избранного (Pinia + localStorage). */
+const favorites = useFavoritesStore();
+
+/** Текущее состояние «в избранном» для этого тура. */
+const isFavorite = computed(() => favorites.isFavorite(props.tour.id));
+
+// Состояние из localStorage восстанавливается только на клиенте:
+// при SSR store пуст, после монтирования подгружаем сохранённое избранное.
+onMounted(() => {
+  favorites.loadFromStorage();
+});
 </script>
 
 <template>
@@ -33,9 +46,15 @@ const coverImage = computed(() => props.tour.images[0] ?? "");
 
       <!-- Кнопка "В избранное" -->
       <button
+        type="button"
+        :aria-label="isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'"
         class="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-red-500 transition-all"
+        @click="favorites.toggleFavorite(tour)"
       >
-        <Icon name="i-lucide:heart" />
+        <Icon
+          name="i-lucide:heart"
+          :class="isFavorite ? 'fill-red-500 text-red-500' : ''"
+        />
       </button>
 
       <!-- Оверлей с локацией -->
