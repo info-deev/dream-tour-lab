@@ -30,9 +30,12 @@ onMounted(() => {
   >
     <!-- Изображение -->
     <div class="relative h-64 overflow-hidden">
-      <img
+      <NuxtImg
         :src="coverImage"
         :alt="tour.title"
+        :width="800"
+        :height="600"
+        loading="lazy"
         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
 
